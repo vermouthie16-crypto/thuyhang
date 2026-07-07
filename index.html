@@ -268,7 +268,7 @@
       <div class="stamp"><span class="big">🧸</span>MADE WITH<br>CARE</div>
       <span class="eyebrow">🧸 Portfolio cá nhân</span>
       <span class="greet-en">Hello, nice to meet you!</span>
-      <h1>Xin chào, mình là <span>Vũ Thúy Hằng</span> 🧸</h1>
+      <h1>Xin chào, mình là <span>Vũ Thị Thúy Hằng</span> 🧸</h1>
       <p>Sinh viên khoa <b>Ngôn ngữ và Văn hóa Trung Quốc</b> tại <b>Trường Đại học Ngoại ngữ - Đại học Quốc gia Hà Nội</b>. Đại học Quốc gia Hà Nội. Mình có niềm yêu thích với ngoại ngữ và mong rằng bản thân không ngừng khám phá những giá trị ngôn ngữ, văn hóa để hoàn thiện bản thân và mở rộng cơ hội trong tương lai. 
 Là sinh viên năm nhất, mình hi vọng bản thân tiến bộ thông qua việc học tập nghiêm túc và không ngừng khám phá kiến thức mới. Đồng thời, mình luôn chủ động rèn luyện kỹ năng, tích cực tham gia các hoạt động tập thể và mở rộng trải nghiệm để chuẩn bị cho môi trường học tập và làm việc sau này. 
 Portfolio được coi là cuốn "hộ chiếu" nho nhỏ mình dùng để lưu lại hành trình học tập, các bài tập và những trải nghiệm đáng nhớ trong học phần Nhập môn Công nghệ số và Ứng dụng Trí tuệ nhân tạo.</p>
@@ -424,50 +424,68 @@ Portfolio được coi là cuốn "hộ chiếu" nho nhỏ mình dùng để lư
 </div>
 
 <script>
-  // ===== Cổng đọc tài liệu: mở/thu gọn khung xem tài liệu =====
-  function toggleDocPortal(btn){
-    const portal = btn.nextElementSibling;
-    portal.classList.toggle('open');
-    btn.textContent = portal.classList.contains('open') ? '📕 Thu gọn tài liệu' : '📖 Xem trực tiếp bài làm';
-  }
-  window.toggleDocPortal = toggleDocPortal;
+// THAY THẾ ĐOẠN SCRIPT CŨ BẰNG ĐOẠN NÀY:
 
-  // tự động hiện placeholder nếu iframe chưa được gắn link tài liệu
-  document.querySelectorAll('.doc-frame-wrap').forEach(wrap => {
-    const frame = wrap.querySelector('.doc-frame');
-    const src = (frame.getAttribute('src') || '').trim();
-    if(!src || src === 'about:blank'){
-      wrap.classList.add('is-empty');
+function toggleDocPortal(btn){
+  const portal = btn.nextElementSibling;
+  portal.classList.toggle('open');
+  btn.textContent = portal.classList.contains('open') ? '📕 Thu gọn tài liệu' : '📖 Xem trực tiếp bài làm';
+}
+window.toggleDocPortal = toggleDocPortal;
+
+document.querySelectorAll('.doc-frame-wrap').forEach(wrap => {
+  const frame = wrap.querySelector('.doc-frame');
+  const src = (frame.getAttribute('src') || '').trim();
+  if(!src || src === 'about:blank'){
+    wrap.classList.add('is-empty');
+  }
+});
+
+const reveals = document.querySelectorAll('.reveal');
+reveals.forEach((el,i)=>{ el.style.transitionDelay = (i % 6) * 0.07 + 's'; });
+
+// Tối ưu hóa Observer: Chỉ thêm class in-view, không can thiệp lệnh cuộn khi load trang
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){ 
+      entry.target.classList.add('in-view'); 
+      io.unobserve(entry.target); 
     }
   });
+}, { threshold: 0.05 }); // Giảm threshold xuống để nhẹ hơn
+reveals.forEach(el=>io.observe(el));
 
-  const reveals = document.querySelectorAll('.reveal');
-  reveals.forEach((el,i)=>{ el.style.transitionDelay = (i % 6) * 0.07 + 's'; });
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
-    });
-  }, { threshold: 0.12 });
-  reveals.forEach(el=>io.observe(el));
-
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link=>{
-    link.addEventListener('click',(e)=>{
-      const target = document.querySelector(link.getAttribute('href'));
-      if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
-    });
+// Sửa logic Click Nav: Chỉ cuộn khi NGƯỜI DÙNG CLICK thực sự
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link=>{
+  link.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const targetId = link.getAttribute('href');
+    const target = document.querySelector(targetId);
+    if(target){ 
+      // Tạm thời tắt scroll-behavior của html để tránh xung đột jump
+      document.documentElement.style.scrollBehavior = 'auto';
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Trả lại trạng thái sau khi cuộn xong
+      setTimeout(() => {
+        document.documentElement.style.scrollBehavior = 'smooth';
+      }, 500);
+    }
   });
+});
 
-  const sections = document.querySelectorAll('main section[id]');
-  const navIo = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
-      }
-    });
-  }, { threshold: 0.35 });
-  sections.forEach(s=>navIo.observe(s));
+// Theo dõi vị trí để sáng đèn menu menu (Active link) nhưng không auto-scroll
+const sections = document.querySelectorAll('main section[id]');
+const navIo = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    // Chỉ kích hoạt khi phần tử chiếm phần lớn màn hình và không chạy auto khi vừa load
+    if(entry.isIntersecting && entry.intersectionRatio > 0.1){
+      const id = entry.target.getAttribute('id');
+      navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+    }
+  });
+}, { threshold: [0.1, 0.3], rootMargin: "-10% 0px -70% 0px" }); 
+sections.forEach(s=>navIo.observe(s));
 </script>
 </body>
 </html>
