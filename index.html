@@ -23,7 +23,6 @@
     --radius: 26px;
   }
   *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
@@ -108,9 +107,8 @@
   .tape.tl{ top: -12px; left: 26px; transform: rotate(-8deg); }
   .tape.tr{ top: -12px; right: 26px; transform: rotate(7deg); background: repeating-linear-gradient(45deg, var(--mint), var(--mint) 6px, #b9e4c0 6px, #b9e4c0 12px); }
 
-  .reveal{ 
-    opacity: 0; 
-  transition: opacity 0.6s ease; 
+.reveal{ opacity: 0; transition: opacity 0.6s ease; }
+.reveal.in-view{ opacity: 1; }
   }
   .reveal.in-view{ 
     opacity: 1; 
@@ -428,68 +426,71 @@ Portfolio được coi là cuốn "hộ chiếu" nho nhỏ mình dùng để lư
 </div>
 
 <script>
-// THAY THẾ ĐOẠN SCRIPT CŨ BẰNG ĐOẠN NÀY:
-
-function toggleDocPortal(btn){
-  const portal = btn.nextElementSibling;
-  portal.classList.toggle('open');
-  btn.textContent = portal.classList.contains('open') ? '📕 Thu gọn tài liệu' : '📖 Xem trực tiếp bài làm';
-}
-window.toggleDocPortal = toggleDocPortal;
-
-document.querySelectorAll('.doc-frame-wrap').forEach(wrap => {
-  const frame = wrap.querySelector('.doc-frame');
-  const src = (frame.getAttribute('src') || '').trim();
-  if(!src || src === 'about:blank'){
-    wrap.classList.add('is-empty');
+  // Khóa cứng không cho trình duyệt tự động nhảy cuộn khi load trang (Sửa lỗi nhảy loạn)
+  if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
   }
-});
+  window.scrollTo(0, 0);
 
-const reveals = document.querySelectorAll('.reveal');
-reveals.forEach((el,i)=>{ el.style.transitionDelay = (i % 6) * 0.07 + 's'; });
+  // ===== Cổng đọc tài liệu: mở/thu gọn khung xem tài liệu =====
+  function toggleDocPortal(btn){
+    const portal = btn.nextElementSibling;
+    portal.classList.toggle('open');
+    btn.textContent = portal.classList.contains('open') ? '📕 Thu gọn tài liệu' : '📖 Xem trực tiếp bài làm';
+  }
+  window.toggleDocPortal = toggleDocPortal;
 
-// Tối ưu hóa Observer: Chỉ thêm class in-view, không can thiệp lệnh cuộn khi load trang
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){ 
-      entry.target.classList.add('in-view'); 
-      io.unobserve(entry.target); 
+  // Tự động hiện placeholder nếu iframe chưa được gắn link tài liệu
+  document.querySelectorAll('.doc-frame-wrap').forEach(wrap => {
+    const frame = wrap.querySelector('.doc-frame');
+    const src = (frame.getAttribute('src') || '').trim();
+    if(!src || src === 'about:blank'){
+      wrap.classList.add('is-empty');
     }
   });
-}, { threshold: 0.05 }); // Giảm threshold xuống để nhẹ hơn
-reveals.forEach(el=>io.observe(el));
 
-// Sửa logic Click Nav: Chỉ cuộn khi NGƯỜI DÙNG CLICK thực sự
-const navLinks = document.querySelectorAll('.nav-link');
-navLinks.forEach(link=>{
-  link.addEventListener('click',(e)=>{
-    e.preventDefault();
-    const targetId = link.getAttribute('href');
-    const target = document.querySelector(targetId);
-    if(target){ 
-      // Tạm thời tắt scroll-behavior của html để tránh xung đột jump
-      document.documentElement.style.scrollBehavior = 'auto';
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Trả lại trạng thái sau khi cuộn xong
-      setTimeout(() => {
-        document.documentElement.style.scrollBehavior = 'smooth';
-      }, 500);
-    }
-  });
-});
+  // Hiệu ứng hiện hình khi cuộn trang (Đã sửa để không gây nhảy trang khi load)
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach((el,i)=>{ el.style.transitionDelay = (i % 6) * 0.07 + 's'; });
+  
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ 
+        entry.target.classList.add('in-view'); 
+        io.unobserve(entry.target); 
+      }
+    });
+  }, { threshold: 0.01 }); // Hạ thấp threshold để trình duyệt không bị tính toán nặng
+  reveals.forEach(el=>io.observe(el));
 
-// Theo dõi vị trí để sáng đèn menu menu (Active link) nhưng không auto-scroll
-const sections = document.querySelectorAll('main section[id]');
-const navIo = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    // Chỉ kích hoạt khi phần tử chiếm phần lớn màn hình và không chạy auto khi vừa load
-    if(entry.isIntersecting && entry.intersectionRatio > 0.1){
-      const id = entry.target.getAttribute('id');
-      navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
-    }
+  // Click vào Menu điều hướng mượt mà (Chỉ cuộn khi NGƯỜI DÙNG CLICK thực sự)
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link=>{
+    link.addEventListener('click',(e)=>{
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if(target){ 
+        // Tắt scroll-behavior tạm thời để tránh xung đột nhảy trang
+        document.documentElement.style.scrollBehavior = 'auto';
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+        setTimeout(() => {
+          document.documentElement.style.scrollBehavior = 'smooth';
+        }, 600);
+      }
+    });
   });
-}, { threshold: [0.1, 0.3], rootMargin: "-10% 0px -70% 0px" }); 
-sections.forEach(s=>navIo.observe(s));
+
+  // Theo dõi vị trí để sáng đèn menu menu (Active link) mà không gây giật cuộn trang
+  const sections = document.querySelectorAll('main section[id]');
+  const navIo = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+      }
+    });
+  }, { threshold: 0.2, rootMargin: "-20% 0px -60% 0px" }); // Tạo vùng đệm an toàn để không bị lặp vòng cuộn
+  sections.forEach(s=>navIo.observe(s));
 </script>
 </body>
 </html>
