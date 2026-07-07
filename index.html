@@ -417,7 +417,7 @@ Portfolio được coi là cuốn "hộ chiếu" nho nhỏ mình dùng để lư
       </div>
     </section>
 
-    <footer><span class="bear">🧸</span> made by Vũ Thúy Hằng — cảm ơn bạn đã ghé thăm <span class="bear">🫧</span></footer>
+    <footer><span class="bear">🧸</span> made by Vũ Thị Thúy Hằng — cảm ơn bạn đã ghé thăm <span class="bear">🫧</span></footer>
 
   </main>
 </div>
@@ -470,15 +470,16 @@ window.scrollTo(0, 0); // Ép trang luôn nằm ở đỉnh khi vừa tải xong
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link=>{
     link.addEventListener('click',(e)=>{
-      e.preventDefault();
       const target = document.querySelector(link.getAttribute('href'));
       if(target){ 
-        // Tắt scroll-behavior tạm thời để tránh xung đột nhảy trang
-        document.documentElement.style.scrollBehavior = 'auto';
+        e.preventDefault(); 
+        // Bật tạm thời mượt khi người dùng click chủ động
+        document.documentElement.style.scrollBehavior = 'smooth';
         target.scrollIntoView({behavior:'smooth', block:'start'});
+        // Trả lại tĩnh sau khi cuộn xong để tránh tự nhảy tự động
         setTimeout(() => {
-          document.documentElement.style.scrollBehavior = 'smooth';
-        }, 600);
+          document.documentElement.style.scrollBehavior = 'auto';
+        }, 800);
       }
     });
   });
