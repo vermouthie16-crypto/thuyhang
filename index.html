@@ -107,12 +107,8 @@
   .tape.tl{ top: -12px; left: 26px; transform: rotate(-8deg); }
   .tape.tr{ top: -12px; right: 26px; transform: rotate(7deg); background: repeating-linear-gradient(45deg, var(--mint), var(--mint) 6px, #b9e4c0 6px, #b9e4c0 12px); }
 
-.reveal{ opacity: 0; transition: opacity 0.6s ease; }
-.reveal.in-view{ opacity: 1; }
-  }
-  .reveal.in-view{ 
-    opacity: 1; 
-  }
+  .reveal{ opacity: 0; transition: opacity 0.6s ease; }
+  .reveal.in-view{ opacity: 1; }
   /* hero postcard */
   .hero-postcard .eyebrow{
     display: inline-block; background: var(--sand); color: var(--mocha); font-weight: 800;
@@ -173,11 +169,12 @@
   }
   .doc-toggle-btn:hover{ transform: translateY(-3px) scale(1.02); }
   .doc-portal{
-    max-height: 0; opacity: 0; overflow: hidden;
-    transition: max-height 0.55s cubic-bezier(.2,.8,.3,1), opacity 0.45s ease, margin-top 0.45s ease;
-    margin-top: 0;
-  }
-  .doc-portal.open{ max-height: calc(85vh + 120px); opacity: 1; margin-top: 14px; }
+  display: none;
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height 0.55s cubic-bezier(.2,.8,.3,1), opacity 0.45s ease, margin-top 0.45s ease;
+  margin-top: 0;
+}
+  .doc-portal.open{ display: block; max-height: calc(85vh + 120px); opacity: 1; margin-top: 14px; }
   .doc-portal-inner{
     background: var(--cream); border: 1px solid rgba(143,90,44,0.28);
     border-radius: 16px; padding: 14px; box-shadow: var(--shadow);
@@ -426,6 +423,12 @@ Portfolio được coi là cuốn "hộ chiếu" nho nhỏ mình dùng để lư
 </div>
 
 <script>
+  // Thêm 4 dòng này vào ngay đầu thẻ <script> để khóa cứng cuộn ảo lúc load
+if (history.scrollRestoration) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+document.documentElement.style.scrollBehavior = 'auto';
 // Khóa không cho trình duyệt tự động cuộn lại vị trí cũ hoặc tự nhảy khi load trang
 if (history.scrollRestoration) {
     history.scrollRestoration = 'manual';
