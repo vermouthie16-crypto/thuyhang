@@ -426,11 +426,11 @@ Portfolio được coi là cuốn "hộ chiếu" nho nhỏ mình dùng để lư
 </div>
 
 <script>
-  // Khóa cứng không cho trình duyệt tự động nhảy cuộn khi load trang (Sửa lỗi nhảy loạn)
-  if (history.scrollRestoration) {
+// Khóa không cho trình duyệt tự động cuộn lại vị trí cũ hoặc tự nhảy khi load trang
+if (history.scrollRestoration) {
     history.scrollRestoration = 'manual';
-  }
-  window.scrollTo(0, 0);
+}
+window.scrollTo(0, 0); // Ép trang luôn nằm ở đỉnh khi vừa tải xong
 
   // ===== Cổng đọc tài liệu: mở/thu gọn khung xem tài liệu =====
   function toggleDocPortal(btn){
