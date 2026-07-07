@@ -480,17 +480,32 @@ window.scrollTo(0, 0); // Ép trang luôn nằm ở đỉnh khi vừa tải xong
     });
   });
 
-  // Theo dõi vị trí để sáng đèn menu menu (Active link) mà không gây giật cuộn trang
-  const sections = document.querySelectorAll('main section[id]');
-  const navIo = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
-      }
-    });
-  }, { threshold: 0.2, rootMargin: "-20% 0px -60% 0px" }); // Tạo vùng đệm an toàn để không bị lặp vòng cuộn
-  sections.forEach(s=>navIo.observe(s));
+// THAY THẾ TOÀN BỘ ĐOẠN "const navIo = ..." CHO ĐẾN HẾT BẰNG ĐOẠN NÀY:
+
+const sections = document.querySelectorAll('main section[id]');
+let isPageLoaded = false;
+
+// Chỉ cho phép theo dõi vị trí sau khi trang đã tải xong hoàn toàn 1 giây
+setTimeout(() => {
+  isPageLoaded = true;
+}, 1000);
+
+const navIo = new IntersectionObserver((entries) => {
+  // Nếu trang chưa load xong ổn định thì tuyệt đối không làm gì cả
+  if (!isPageLoaded) return; 
+
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+      const id = entry.target.getAttribute('id');
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    }
+  });
+}, { 
+  threshold: [0.3, 0.5],
+  rootMargin: "-10% 0px -60% 0px" // Giới hạn vùng nhận diện để không bị tranh chấp giữa các section
+});
+
+sections.forEach(s => navIo.observe(s));
 </script>
 </body>
 </html>
