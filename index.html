@@ -108,9 +108,13 @@
   .tape.tl{ top: -12px; left: 26px; transform: rotate(-8deg); }
   .tape.tr{ top: -12px; right: 26px; transform: rotate(7deg); background: repeating-linear-gradient(45deg, var(--mint), var(--mint) 6px, #b9e4c0 6px, #b9e4c0 12px); }
 
-  .reveal{ opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.8,.3,1.1); }
-  .reveal.in-view{ opacity: 1; transform: translateY(0); }
-
+  .reveal{ 
+    opacity: 0; 
+  transition: opacity 0.6s ease; 
+  }
+  .reveal.in-view{ 
+    opacity: 1; 
+  }
   /* hero postcard */
   .hero-postcard .eyebrow{
     display: inline-block; background: var(--sand); color: var(--mocha); font-weight: 800;
