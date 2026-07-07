@@ -484,3 +484,12 @@ div[class*="avatar-frame"] img {
     width: 260px !important;       /* Nới rộng sidebar ra một chút để tên không bị kích */
     min-width: 260px !important;
 }
+.side-name {
+    display: block !important;
+    white-space: normal !important; /* Cho phép chữ tự xuống dòng khi hết khung, không bị ẩn */
+    overflow: visible !important;   /* Hiện đầy đủ tất cả các chữ */
+    font-size: 20px !important;     /* Kích thước vừa vặn cho cả 4 chữ */
+    line-height: 1.3 !important;
+    text-align: center !important;  /* Căn giữa cho đẹp */
+    width: 100% !important;
+}
