@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vũ Thúy Hằng — Portfolio 🧸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FFF8EC;
+    --paper: #FFFDF8;
+    --sand: #F3E1C4;
+    --latte: #C9A268;
+    --mocha: #8F5A2C;
+    --cocoa: #6E4A2C;
+    --ink: #33200F;
+    --ink-soft: #6B4A2E;
+    --lavender: #E3D9F5;
+    --mint: #DCEFDD;
+    --shadow: 0 20px 44px -20px rgba(51, 32, 15, 0.32);
+    --radius: 26px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  body{
+    margin: 0; font-family: 'Quicksand', sans-serif; color: var(--ink);
+    background: var(--cream);
+  }
+  h1,h2,h3,.display{ font-family: 'Fraunces', serif; font-weight: 600; }
+  .elegant-italic{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; }
+  a{ color: inherit; text-decoration: none; }
+
+  /* ===== layout: fixed sidebar "passport" + scrollable postcard feed ===== */
+  .app{ display: flex; min-height: 100vh; }
+
+  .sidebar{
+    position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+    background: linear-gradient(165deg, var(--cocoa), var(--latte) 55%, var(--sand));
+    color: #fff; padding: 34px 26px; display: flex; flex-direction: column;
+    z-index: 20; overflow-y: auto;
+  }
+  .sidebar *{ text-shadow: 0 1px 3px rgba(51,32,15,0.35); }
+  .sidebar::-webkit-scrollbar{ width: 0; }
+  .passport-badge{
+    align-self: flex-start; font-size: 0.68rem; font-weight: 800; letter-spacing: 1.5px;
+    background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 999px; margin-bottom: 22px;
+    text-transform: uppercase;
+  }
+  .avatar-wrap{ display: flex; justify-content: center; margin-bottom: 18px; }
+  .avatar{
+    width: 132px; height: 132px; border-radius: 50%;
+    background: linear-gradient(150deg, #fff, var(--sand));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 2.4rem; color: var(--mocha);
+    border: 5px solid rgba(255,255,255,0.85); box-shadow: 0 14px 30px -10px rgba(0,0,0,0.3);
+    position: relative; animation: bobble 5s ease-in-out infinite; text-shadow: none;
+  }
+  @keyframes bobble{ 0%,100%{ transform: translateY(0) rotate(-2deg);} 50%{ transform: translateY(-8px) rotate(2deg);} }
+  .avatar::after{ content:"🧸"; position:absolute; bottom:-4px; right:-6px; font-size:1.6rem; }
+
+  .side-name{ text-align: center; font-size: 1.5rem; line-height: 1.25; margin: 4px 0 6px; }
+  .side-sub{ text-align: center; font-size: 0.86rem; opacity: 0.92; margin: 0 0 18px; }
+  .side-chip{
+    display: block; text-align: center; font-size: 0.76rem; font-weight: 700;
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    padding: 7px 10px; border-radius: 12px; margin-bottom: 8px;
+  }
+
+  .side-nav{ list-style: none; margin: 26px 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .side-nav a{
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px;
+    font-weight: 700; font-size: 0.92rem; transition: all 0.3s ease; opacity: 0.85;
+  }
+  .side-nav a .dot{ width: 7px; height: 7px; border-radius: 50%; background: #fff; opacity: 0.6; }
+  .side-nav a:hover, .side-nav a.active{ background: rgba(255,255,255,0.22); opacity: 1; transform: translateX(4px); }
+  .side-nav a.active .dot{ opacity: 1; box-shadow: 0 0 0 4px rgba(255,255,255,0.28); }
+
+  .side-footer{ margin-top: auto; }
+  .drive-btn{
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #fff; color: var(--mocha); font-weight: 800; font-size: 0.85rem;
+    padding: 12px 14px; border-radius: 999px; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.3);
+    transition: transform 0.3s cubic-bezier(.3,1.4,.5,1); text-shadow: none;
+  }
+  .drive-btn:hover{ transform: translateY(-3px) rotate(-1deg); }
+  .side-stamp{
+    margin-top: 16px; text-align: center; font-size: 0.72rem; opacity: 0.9; line-height: 1.5;
+  }
+
+  /* ===== main scroll feed ===== */
+  main{ margin-left: 300px; flex: 1; padding: 48px 6vw 30px; max-width: 980px; }
+
+  .postcard{
+    position: relative; background: var(--paper); border-radius: var(--radius);
+    box-shadow: var(--shadow); border: 1px solid rgba(110,74,44,0.16);
+    padding: 44px; margin-bottom: 46px; overflow: hidden;
+  }
+  .tape{
+    position: absolute; width: 90px; height: 28px; opacity: 0.85;
+    background: repeating-linear-gradient(45deg, var(--lavender), var(--lavender) 6px, #d8ccff 6px, #d8ccff 12px);
+    box-shadow: 0 4px 10px -4px rgba(0,0,0,0.25);
+  }
+  .tape.tl{ top: -12px; left: 26px; transform: rotate(-8deg); }
+  .tape.tr{ top: -12px; right: 26px; transform: rotate(7deg); background: repeating-linear-gradient(45deg, var(--mint), var(--mint) 6px, #b9e4c0 6px, #b9e4c0 12px); }
+
+  .reveal{ opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.8,.3,1.1); }
+  .reveal.in-view{ opacity: 1; transform: translateY(0); }
+
+  /* hero postcard */
+  .hero-postcard .eyebrow{
+    display: inline-block; background: var(--sand); color: var(--mocha); font-weight: 800;
+    font-size: 0.78rem; padding: 6px 14px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .hero-postcard h1{ font-size: clamp(2rem, 4vw, 2.9rem); margin: 0 0 6px; color: var(--ink); }
+  .hero-postcard h1 span{ color: var(--mocha); }
+  .hero-postcard .greet-en{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 1.35rem; color: var(--mocha); display:block; margin-bottom: 4px; }
+  .hero-postcard p{ max-width: 620px; line-height: 1.8; color: var(--ink-soft); font-size: 1.03rem; }
+  .stamp{
+    position: absolute; top: 40px; right: 44px; width: 92px; height: 108px;
+    background: var(--mint); border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.25); transform: rotate(8deg);
+    border: 3px dashed #fff; color: #3f6e4a; font-weight: 800; text-align: center; font-size: 0.7rem; line-height: 1.4;
+    animation: wiggle 4s ease-in-out infinite;
+  }
+  @keyframes wiggle{ 0%,100%{ transform: rotate(8deg);} 50%{ transform: rotate(3deg);} }
+  .stamp .big{ font-size: 1.5rem; }
+  .quote-en{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 1.2rem; color: var(--ink-soft); margin-top: 18px; }
+
+  .section-title{ display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+  .section-title h2{ font-size: 1.5rem; margin: 0; color: var(--ink); }
+  .section-title .badge-num{
+    width: 40px; height: 40px; border-radius: 50%; background: var(--sand); color: var(--mocha);
+    display: flex; align-items: center; justify-content: center; font-weight: 600; font-family:'Fraunces',serif;
+  }
+  /* assignments masonry */
+  .work-masonry{ column-count: 2; column-gap: 20px; }
+  .work-card{
+    break-inside: avoid; margin-bottom: 20px; border-radius: 20px; padding: 22px 24px;
+    background: var(--paper); border: 1.5px solid rgba(110,74,44,0.18); box-shadow: var(--shadow);
+    transition: transform 0.35s cubic-bezier(.3,1.4,.5,1);
+  }
+  .work-card:hover{ transform: translateY(-6px) rotate(-0.6deg); }
+  .work-card .idx{ font-family: 'Fraunces', serif; font-style: italic; font-size: 1.25rem; color: var(--mocha); font-weight: 500; }
+  .work-card h3{ margin: 2px 0 8px; font-size: 1.08rem; color: var(--ink); }
+
+  /* goal / achievement block */
+  .goal-block{
+    background: rgba(201,162,104,0.16); border: 1px dashed rgba(143,90,44,0.35);
+    border-radius: 14px; padding: 12px 14px; margin: 0 0 14px;
+  }
+  .goal-line{ font-size: 0.88rem; line-height: 1.6; color: var(--ink-soft); margin: 0; }
+  .goal-line + .goal-line{ margin-top: 8px; }
+  .goal-label{
+    display: inline-block; font-weight: 800; font-size: 0.78rem; color: var(--mocha);
+    background: #fff; border-radius: 999px; padding: 3px 10px; margin-right: 8px;
+  }
+  .goal-label.result{ color: var(--cocoa); }
+
+  /* doc portal toggle + viewer */
+  .doc-toggle-btn{
+    width: 100%; padding: 10px 14px; border-radius: 999px; border: none; cursor: pointer;
+    font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 0.82rem; color: #fff;
+    background: linear-gradient(135deg, var(--mocha), var(--latte));
+    box-shadow: 0 10px 18px -10px rgba(51,32,15,0.5);
+    transition: transform 0.3s cubic-bezier(.3,1.4,.5,1), box-shadow 0.3s ease;
+  }
+  .doc-toggle-btn:hover{ transform: translateY(-3px) scale(1.02); }
+  .doc-portal{
+    max-height: 0; opacity: 0; overflow: hidden;
+    transition: max-height 0.55s cubic-bezier(.2,.8,.3,1), opacity 0.45s ease, margin-top 0.45s ease;
+    margin-top: 0;
+  }
+  .doc-portal.open{ max-height: 560px; opacity: 1; margin-top: 14px; }
+  .doc-portal-inner{
+    background: var(--cream); border: 1px solid rgba(143,90,44,0.28);
+    border-radius: 16px; padding: 14px; box-shadow: var(--shadow);
+  }
+  .doc-portal-label{
+    display: inline-block; font-family: 'Fraunces', serif; font-size: 0.9rem; color: var(--mocha);
+    background: var(--sand); border-radius: 999px; padding: 4px 12px; margin-bottom: 10px;
+  }
+  .doc-frame-wrap{ position: relative; width: 100%; height: 380px; border-radius: 14px; overflow: hidden; background: var(--sand); }
+  .doc-frame{ width: 100%; height: 100%; border: none; display: block; }
+  .doc-frame-wrap.is-empty .doc-frame{ visibility: hidden; }
+  .doc-placeholder{
+    display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 18px; gap: 6px; color: var(--ink-soft); font-size: 0.82rem; line-height: 1.6;
+  }
+  .doc-placeholder span{ font-size: 1.8rem; }
+  .doc-placeholder code{ background: rgba(143,90,44,0.15); color: var(--mocha); padding: 2px 8px; border-radius: 8px; font-size: 0.76rem; }
+  .doc-frame-wrap.is-empty .doc-placeholder{ display: flex; }
+
+  /* summary postcard */
+  .summary-postcard{ text-align: center; }
+  .summary-postcard .quote-main{ font-family:'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 1.45rem; color: var(--ink); max-width: 640px; margin: 6px auto 30px; line-height: 1.5; }
+  .reflect-two{ display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 30px; text-align: left; margin-bottom: 30px; }
+  .reflect-two h3{ font-size: 1.05rem; margin: 0 0 10px; display:flex; align-items:center; gap:8px; }
+  .reflect-two p{ font-size: 0.92rem; line-height: 1.75; color: var(--ink-soft); margin: 0; }
+  .stat-row{ display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; border-top: 2px dashed rgba(143,90,44,0.3); padding-top: 26px; }
+  .stat-row .num{ font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.9rem; color: var(--mocha); }
+  .stat-row .label{ font-size: 0.82rem; color: var(--ink-soft); }
+
+  footer{ text-align: center; padding: 20px 6vw 50px; color: var(--ink-soft); font-size: 0.86rem; }
+  footer .bear{ display: inline-block; }
+
+  @media (max-width: 860px){
+    .app{ flex-direction: column; }
+    .sidebar{ position: relative; width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; padding: 20px 5vw; }
+    .avatar-wrap{ margin: 0; }
+    .avatar{ width: 78px; height: 78px; font-size: 1.5rem; }
+    .side-name{ font-size: 1.15rem; text-align: left; }
+    .side-sub{ text-align: left; margin-bottom: 6px; }
+    .side-nav{ flex-direction: row; flex-wrap: wrap; margin: 10px 0; width: 100%; }
+    .side-footer{ margin-top: 0; width: 100%; }
+    main{ margin-left: 0; padding: 30px 5vw; }
+    .work-masonry{ column-count: 1; }
+    .stamp{ position: static; margin: 0 auto 20px; }
+  }
+</style>
+</head>
+<body>
+<!--
+  HƯỚNG DẪN NHÚNG TÀI LIỆU (Cổng đọc tài liệu):
+  Với mỗi bài, tìm dòng <iframe class="doc-frame" src="" ...> tương ứng và dán link nhúng vào thuộc tính src, ví dụ:
+  1) Google Drive: chia sẻ file docx ở chế độ "Bất kỳ ai có link", lấy FILE_ID trong link rồi dùng:
+     src="https://drive.google.com/file/d/FILE_ID/preview"
+  2) Nếu file docx nằm ở một link công khai khác, dùng Office Viewer:
+     src="https://view.officeapps.live.com/op/embed.aspx?src=DUONG_DAN_FILE_DA_MA_HOA_URL"
+  Khi src có giá trị hợp lệ, khung "Chưa có tài liệu" sẽ tự động biến mất.
+-->
+
+<div class="app">
+
+  <aside class="sidebar">
+    <span class="passport-badge">🧸 Portfolio</span>
+    <div class="avatar-wrap">
+      <div class="avatar">TH</div>
+    </div>
+    <h1 class="side-name">Vũ Thúy<br>Hằng</h1>
+    <p class="side-sub">[điền ngành học] 🎓</p>
+    <span class="side-chip">MSV: [điền MSV]</span>
+    <span class="side-chip">[điền tên trường]</span>
+
+    <ul class="side-nav">
+      <li><a href="#trang-bia" class="nav-link active"><span class="dot"></span>Trang bìa</a></li>
+      <li><a href="#bai-tap" class="nav-link"><span class="dot"></span>Bài tập</a></li>
+      <li><a href="#tong-ket" class="nav-link"><span class="dot"></span>Tổng kết</a></li>
+    </ul>
+
+    <div class="side-footer">
+      <a href="#" class="drive-btn">📁 Google Drive</a>
+      <p class="side-stamp">✈️ made with 🧸<br>at [điền tên trường]</p>
+    </div>
+  </aside>
+
+  <main>
+
+    <section id="trang-bia" class="postcard hero-postcard reveal">
+      <div class="tape tl"></div><div class="tape tr"></div>
+      <div class="stamp"><span class="big">🧸</span>MADE WITH<br>CARE</div>
+      <span class="eyebrow">🧸 Portfolio cá nhân</span>
+      <span class="greet-en">Hello, nice to meet you!</span>
+      <h1>Xin chào, mình là <span>Vũ Thúy Hằng</span> 🧸</h1>
+      <p>Sinh viên ngành <b>[điền ngành học]</b> tại <b>[điền tên trường]</b>. Đây là cuốn "hộ chiếu" nho nhỏ mình dùng để lưu lại hành trình học tập, các bài tập và những trải nghiệm đáng nhớ trong học phần Nhập môn Công nghệ số và Ứng dụng Trí tuệ nhân tạo.</p>
+      <p class="quote-en">"Learning never stops opening new doors."</p>
+    </section>
+
+    <section id="bai-tap" class="postcard reveal">
+      <div class="tape tr"></div>
+      <div class="section-title"><span class="badge-num">01</span><h2>Hệ thống bài tập cá nhân</h2></div>
+      <div class="work-masonry">
+
+        <div class="work-card reveal">
+          <span class="idx">01.</span>
+          <h3>🧸 Thao tác cơ bản với tệp tin và thư mục</h3>
+          <div class="goal-block">
+            <p class="goal-line"><span class="goal-label">🎯 Mục tiêu</span>[điền mục tiêu bài tập]</p>
+            <p class="goal-line"><span class="goal-label result">🏆 Thành quả</span>[điền thành quả đạt được]</p>
+          </div>
+          <button class="doc-toggle-btn" type="button" onclick="toggleDocPortal(this)">📖 Xem trực tiếp bài làm</button>
+          <div class="doc-portal">
+            <div class="doc-portal-inner">
+              <span class="doc-portal-label">🔖 Cổng đọc tài liệu</span>
+              <div class="doc-frame-wrap">
+                <iframe class="doc-frame" src="" title="Tài liệu Bài 1" loading="lazy" allowfullscreen></iframe>
+                <div class="doc-placeholder"><span>🧸</span><p>Chưa có tài liệu<br>Dán link nhúng vào <code>src</code> của iframe Bài 1</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card reveal">
+          <span class="idx">02.</span>
+          <h3>🧸 Tìm kiếm và đánh giá thông tin học thuật</h3>
+          <div class="goal-block">
+            <p class="goal-line"><span class="goal-label">🎯 Mục tiêu</span>[điền mục tiêu bài tập]</p>
+            <p class="goal-line"><span class="goal-label result">🏆 Thành quả</span>[điền thành quả đạt được]</p>
+          </div>
+          <button class="doc-toggle-btn" type="button" onclick="toggleDocPortal(this)">📖 Xem trực tiếp bài làm</button>
+          <div class="doc-portal">
+            <div class="doc-portal-inner">
+              <span class="doc-portal-label">🔖 Cổng đọc tài liệu</span>
+              <div class="doc-frame-wrap">
+                <iframe class="doc-frame" src="" title="Tài liệu Bài 2" loading="lazy" allowfullscreen></iframe>
+                <div class="doc-placeholder"><span>🧸</span><p>Chưa có tài liệu<br>Dán link nhúng vào <code>src</code> của iframe Bài 2</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card reveal">
+          <span class="idx">03.</span>
+          <h3>🧸 Viết Prompt hiệu quả cho việc học tập</h3>
+          <div class="goal-block">
+            <p class="goal-line"><span class="goal-label">🎯 Mục tiêu</span>[điền mục tiêu bài tập]</p>
+            <p class="goal-line"><span class="goal-label result">🏆 Thành quả</span>[điền thành quả đạt được]</p>
+          </div>
+          <button class="doc-toggle-btn" type="button" onclick="toggleDocPortal(this)">📖 Xem trực tiếp bài làm</button>
+          <div class="doc-portal">
+            <div class="doc-portal-inner">
+              <span class="doc-portal-label">🔖 Cổng đọc tài liệu</span>
+              <div class="doc-frame-wrap">
+                <iframe class="doc-frame" src="" title="Tài liệu Bài 3" loading="lazy" allowfullscreen></iframe>
+                <div class="doc-placeholder"><span>🧸</span><p>Chưa có tài liệu<br>Dán link nhúng vào <code>src</code> của iframe Bài 3</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card reveal">
+          <span class="idx">04.</span>
+          <h3>🧸 Sử dụng công cụ hợp tác trực tuyến cho dự án nhóm</h3>
+          <div class="goal-block">
+            <p class="goal-line"><span class="goal-label">🎯 Mục tiêu</span>[điền mục tiêu bài tập]</p>
+            <p class="goal-line"><span class="goal-label result">🏆 Thành quả</span>[điền thành quả đạt được]</p>
+          </div>
+          <button class="doc-toggle-btn" type="button" onclick="toggleDocPortal(this)">📖 Xem trực tiếp bài làm</button>
+          <div class="doc-portal">
+            <div class="doc-portal-inner">
+              <span class="doc-portal-label">🔖 Cổng đọc tài liệu</span>
+              <div class="doc-frame-wrap">
+                <iframe class="doc-frame" src="" title="Tài liệu Bài 4" loading="lazy" allowfullscreen></iframe>
+                <div class="doc-placeholder"><span>🧸</span><p>Chưa có tài liệu<br>Dán link nhúng vào <code>src</code> của iframe Bài 4</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card reveal">
+          <span class="idx">05.</span>
+          <h3>🧸 Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung</h3>
+          <div class="goal-block">
+            <p class="goal-line"><span class="goal-label">🎯 Mục tiêu</span>[điền mục tiêu bài tập]</p>
+            <p class="goal-line"><span class="goal-label result">🏆 Thành quả</span>[điền thành quả đạt được]</p>
+          </div>
+          <button class="doc-toggle-btn" type="button" onclick="toggleDocPortal(this)">📖 Xem trực tiếp bài làm</button>
+          <div class="doc-portal">
+            <div class="doc-portal-inner">
+              <span class="doc-portal-label">🔖 Cổng đọc tài liệu</span>
+              <div class="doc-frame-wrap">
+                <iframe class="doc-frame" src="" title="Tài liệu Bài 5" loading="lazy" allowfullscreen></iframe>
+                <div class="doc-placeholder"><span>🧸</span><p>Chưa có tài liệu<br>Dán link nhúng vào <code>src</code> của iframe Bài 5</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card reveal">
+          <span class="idx">06.</span>
+          <h3>🧸 Sử dụng AI có trách nhiệm trong học tập và nghiên cứu</h3>
+          <div class="goal-block">
+            <p class="goal-line"><span class="goal-label">🎯 Mục tiêu</span>[điền mục tiêu bài tập]</p>
+            <p class="goal-line"><span class="goal-label result">🏆 Thành quả</span>[điền thành quả đạt được]</p>
+          </div>
+          <button class="doc-toggle-btn" type="button" onclick="toggleDocPortal(this)">📖 Xem trực tiếp bài làm</button>
+          <div class="doc-portal">
+            <div class="doc-portal-inner">
+              <span class="doc-portal-label">🔖 Cổng đọc tài liệu</span>
+              <div class="doc-frame-wrap">
+                <iframe class="doc-frame" src="" title="Tài liệu Bài 6" loading="lazy" allowfullscreen></iframe>
+                <div class="doc-placeholder"><span>🧸</span><p>Chưa có tài liệu<br>Dán link nhúng vào <code>src</code> của iframe Bài 6</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="tong-ket" class="postcard summary-postcard reveal">
+      <div class="tape tl"></div><div class="tape tr"></div>
+      <div class="section-title" style="justify-content:center;"><span class="badge-num">02</span><h2>Nhìn nhận &amp; Trải nghiệm học tập</h2></div>
+      <p class="quote-main">"Tri thức mở ra một thế giới mới, còn công nghệ giúp mình bước vào thế giới đó nhanh hơn."</p>
+      <div class="reflect-two">
+        <div class="reflect-col reveal">
+          <h3>🔑 Bài học cốt lõi</h3>
+          <p>Qua học phần "Nhập môn Công nghệ số và Ứng dụng Trí tuệ nhân tạo", mình nhận ra rằng kỹ năng đặt câu hỏi thông minh (Prompt Engineering) và tư duy phản biện chính là chìa khóa để khai thác AI hiệu quả trong học tập và nghiên cứu.</p>
+        </div>
+        <div class="reflect-col reveal">
+          <h3>🌱 Quá trình trưởng thành</h3>
+          <p>Từ những bước đầu còn bỡ ngỡ, mình đã tự tin hơn khi tổ chức tài liệu học tập, làm việc nhóm trên nền tảng trực tuyến và tự tay xây dựng trang portfolio nho nhỏ này để lưu giữ hành trình học tập của bản thân.</p>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat reveal"><div class="num">06/06</div><div class="label">Bài tập hoàn thành</div></div>
+        <div class="stat reveal"><div class="num">100%</div><div class="label">Nhiệt huyết &amp; cố gắng</div></div>
+        <div class="stat reveal"><div class="num">A+</div><div class="label">Mục tiêu học phần</div></div>
+      </div>
+    </section>
+
+    <footer><span class="bear">🧸</span> made by Vũ Thúy Hằng — cảm ơn bạn đã ghé thăm <span class="bear">🫧</span></footer>
+
+  </main>
+</div>
+
+<script>
+  // ===== Cổng đọc tài liệu: mở/thu gọn khung xem tài liệu =====
+  function toggleDocPortal(btn){
+    const portal = btn.nextElementSibling;
+    portal.classList.toggle('open');
+    btn.textContent = portal.classList.contains('open') ? '📕 Thu gọn tài liệu' : '📖 Xem trực tiếp bài làm';
+  }
+  window.toggleDocPortal = toggleDocPortal;
+
+  // tự động hiện placeholder nếu iframe chưa được gắn link tài liệu
+  document.querySelectorAll('.doc-frame-wrap').forEach(wrap => {
+    const frame = wrap.querySelector('.doc-frame');
+    const src = (frame.getAttribute('src') || '').trim();
+    if(!src || src === 'about:blank'){
+      wrap.classList.add('is-empty');
+    }
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach((el,i)=>{ el.style.transitionDelay = (i % 6) * 0.07 + 's'; });
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el=>io.observe(el));
+
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link=>{
+    link.addEventListener('click',(e)=>{
+      const target = document.querySelector(link.getAttribute('href'));
+      if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  const sections = document.querySelectorAll('main section[id]');
+  const navIo = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s=>navIo.observe(s));
+</script>
+</body>
+</html>
